@@ -1,0 +1,18 @@
+	.data
+
+main:	
+	jal scanf_int #lendo um numero inteiro
+	la $s1, 0($v0)
+	
+  jal scanf_int #lendo um numero inteiro
+	la $s2, 0($v0)
+	
+	add $s3, $s2, $s1 # somando $s2 e $s1 e salvando em $s3
+	
+	li $v0, 1 # código para imprimir
+	move $a0, $s3 
+	syscall # executa o comando SO
+	
+	li $v0, 10 #instrucao para finalizar o programa
+	syscall #finaliza o programa
+
