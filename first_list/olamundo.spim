@@ -1,0 +1,10 @@
+  .data
+anj: .asciiz "Ola Mundo"
+  .text
+main: 
+      li $v0, 4  #comando printar uma string
+	    la $a0, anj  #comando para mostrar qual string 
+	    syscall	  #executando comando
+
+      li $v0, 10  #comando para sair
+      syscall  #executando comando
