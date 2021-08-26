@@ -1,0 +1,27 @@
+.text
+main:
+	li $v0, 5 # ler um numero inteiro 
+	syscall 
+	move $s2, $v0
+	
+	li $v0, 5 # ler um numero inteiro
+	syscall 
+	move $s3, $v0
+	
+	sub $s1, $s2, 1 # Tira monitor
+	divu $s4, $s3, $s1 # Divisão de s3 por s1
+	mfhi $s0 # Pega resto
+	
+	beq $s0, $zero, RES # if maior que resto 0
+
+	beq $s2, $s0, RES # else  
+	add $s4, $s4, 1 
+	
+	RES:
+	
+	li $v0, 1
+	move $a0, $s4 # print valor
+	syscall
+	
+	li $v0, 10 #instrução para finalizar
+	syscall # finaliza
