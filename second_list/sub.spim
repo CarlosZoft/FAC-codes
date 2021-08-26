@@ -1,0 +1,19 @@
+	.data
+	.text
+main:	
+	li $v0, 5 # ler um numero inteiro 
+	syscall 
+	move $s2, $v0
+	
+	li $v0, 5 # ler um numero inteiro
+	syscall 
+	move $s1, $v0
+	
+	sub $s3, $s2, $s1 # somando $s2 e $s3 e salvando em $s1
+	
+	li $v0, 1
+	move $a0, $s3 # print valor
+	syscall
+	
+	li $v0, 10 #instrução para finalizar
+	syscall # finaliza
