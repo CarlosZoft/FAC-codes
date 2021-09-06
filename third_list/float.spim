@@ -1,0 +1,117 @@
+.data
+
+    symbol: .asciiz "0x"
+    endl: .asciiz "\n"
+    mais: .asciiz "+\n"
+    menos: .asciiz "-\n"
+    resultado:  .space  8
+    zeroAsFloat: .float 0.0
+
+  .text
+main:
+  li $v0, 6 # Ler um float - racional
+  syscall
+
+  li $v0, 2
+  mov.s $f12, $f0
+  syscall
+
+  li $v0, 4 # comando para imprimir float
+  la $a0, endl # Imprimindo '\n'
+  syscall
+
+
+  mfc1 $t2 $f0 # Copiando $f0 em $t2
+  ori  $t0 $zero 0x1
+  sll  $t0 $t0 31 
+  and  $a0 $t0 $t2
+  srl  $a0 $a0 31
+  add  $t1, $zero, $a0
+  
+
+  beq  $a0, 0, positivo # Caso seja maior que 0
+  bne  $a0, 0, negativo # Caso seja menor que 0
+
+negativo:
+  li $v0, 4 # comando para imprimir string
+  la $a0, menos # Imprimindo -\n
+  syscall
+  beqz $ra, segundoPasso # Finaliza o programa com $ra == 0
+  j segundoPasso
+
+positivo:
+  li $v0, 4 # comando para imprimir string
+  la $a0, mais # Imprimindo +\n
+  syscall
+  beqz $ra, segundoPasso # Finaliza o programa com $ra == 0
+  j segundoPasso
+
+segundoPasso:
+  ori  $t0 $zero 0xFF
+  sll  $t0 $t0 23 
+  and  $a0 $t0 $t2
+  srl  $a0 $a0 23 # swap right to left
+  addi  $t3, $zero, 127
+  sub $a0, $a0, $t3
+    
+
+  addi $v0 $zero 1 # adicionando +1
+  syscall
+
+
+  li $v0, 4 # comando para imprimir string
+  la $a0, endl # Imprimindo '\n'
+  syscall
+    
+
+  li $v0, 4 # comando para imprimir string
+  la $a0, symbol # Imprimindo '0x'
+  syscall
+  
+
+  ori  $t0 $zero 0xFFFF
+  sll  $t0 $t0 7
+  ori  $t0 $t0 0x7F
+  and  $a0 $t0 $t2
+  jal hexadecimal
+    
+
+  li $v0, 4 
+  la $a0, endl
+  syscall
+ 
+
+  li $v0, 10
+  syscall
+
+hexadecimal:    
+  sub $sp, $sp, 24  # pegando posiçoes         
+  sw $a0, 0($sp) # armazendo conteudo
+  sw $s0, 4($sp) # armazendo conteudo
+  sw $s1, 8($sp) # armazendo conteudo
+  sw $s2, 12($sp) # armazendo conteudo
+  sw $s3, 16($sp) # armazendo conteudo
+  sw $s4, 20($sp) # armazendo conteudo
+  move $s2, $a0 # Movendo a0 para s2
+  li $s0, 8  # ler uma string
+  la $s3, resultado # endereço do resultado
+
+loop:
+  rol $s2, $s2, 4          
+  and $s1, $s2, 0xf         
+  ble $s1, 9, print  
+  add $s1, $s1, 7    
+
+print:
+  add $s1, $s1, 48     # somando 48 em s1
+  sb $s1,($s3)      
+  add $s3, $s3, 1      # somando 1 em s3
+  add $s0, $s0, -1     # ssubtraindo 1 em s0
+  bnez $s0, loop       # se s0 != 0 loop
+    
+  la $a0, resultado           # printa resultado
+  li $v0, 4
+  syscall
+
+  jr $ra                      # finalizar
+	syscall
