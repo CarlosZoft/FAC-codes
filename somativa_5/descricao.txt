@@ -1,0 +1,6 @@
+- ENTRADA :
+  String até 16 bits
+
+- UPDATE(String, tamString):
+  percorre toda a string
+    self->value ^= self->refin ? crc16_reflect(x[i], 8) : x[i] << 8;
