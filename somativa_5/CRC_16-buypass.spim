@@ -71,7 +71,7 @@ digest:
   beqz $t1, printBarraN
 
   move $a1, $t4 		
-  la $a0, result 
+  la $a0, result	# where answer will be stored 
   
   jal intToString
  
@@ -118,7 +118,7 @@ LoopIntToString:
 Soma48: 
 	addi $s2, $s2, 48	
 changeByte: 
-	sb $s2, 0($s1)
+	sb $s2, 0($s1)	# armazendo bytes
 	addi $s1, $s1, 1
 	addi $t0, $t0, -1	
 	j LoopIntToString 
